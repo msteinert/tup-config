@@ -69,6 +69,8 @@ void zconf_starthelp(void);
 FILE *zconf_fopen(const char *name);
 void zconf_initscan(const char *name);
 void zconf_nextfile(const char *name);
+void zconf_pushdir(const char *path);
+void zconf_popdir(void);
 int zconf_lineno(void);
 char *zconf_curname(void);
 

@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #define LKC_DIRECT_LINK
 #include "lkc.h"
@@ -328,6 +329,54 @@ void zconf_nextfile(const char *name)
 	file->lineno = 1;
 	file->parent = current_file;
 	current_file = file;
+}
+
+struct dir_entry {
+	int fd;
+	struct dir_entry *next;
+};
+static struct dir_entry *dir_stack = NULL;
+
+void zconf_pushdir(const char *path)
+{
+	struct dir_entry *entry;
+	int fd;
+
+	fd = open(".", O_RDONLY);
+	if(fd < 0) {
+		printf("Error opening '.'\n");
+		exit(1);
+	}
+	if(chdir(path) != 0) {
+		printf("Unable to change to dir: '%s'\n", path);
+		exit(1);
+	}
+
+	entry = malloc(sizeof *entry);
+	if(!entry) {
+		printf("Out of memory\n");
+		exit(1);
+	}
+	entry->fd = fd;
+	entry->next = dir_stack;
+	dir_stack = entry;
+}
+
+void zconf_popdir(void)
+{
+	struct dir_entry *entry;
+
+	entry = dir_stack;
+	if(!entry) {
+		printf("Error: zconf_popdir() before zconf_pushdir\n");
+		exit(1);
+	}
+	if(fchdir(entry->fd) < 0) {
+		printf("Unable to change directory in zconf_popdir()\n");
+		exit(1);
+	}
+	dir_stack = entry->next;
+	free(entry);
 }
 
 static void zconf_endfile(void)
