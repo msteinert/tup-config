@@ -3,7 +3,7 @@ CURSES_LOC = <ncurses.h>
 : zconf.l |> flex -L -P%B -o %o %f && rm -f lex.backup |> lex.zconf.c
 : zconf.gperf |> gperf < %f > %o |> zconf.hash.c
 : zconf.y |> bison -l -b %B -p %B %f |> %B.tab.c
-: foreach conf.c mconf.c zconf.tab.c | zconf.hash.c lex.zconf.c |> gcc -c %f -o %o -DCURSES_LOC='$(CURSES_LOC)' |> %F.o
+: foreach conf.c mconf.c zconf.tab.c | zconf.hash.c lex.zconf.c |> gcc -c %f -o %o -DCURSES_LOC='$(CURSES_LOC)' |> %B.o
 : lxdialog/*.o mconf.o zconf.tab.o |> gcc %f -o %o -lncurses |> tup-mconf
 : conf.o zconf.tab.o |> gcc %f -o %o |> tup-conf
 .gitignore

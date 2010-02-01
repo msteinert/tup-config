@@ -1,3 +1,3 @@
 CURSES_LOC = <ncurses.h>
-: foreach *.c |> gcc -c %f -o %o -DCURSES_LOC='$(CURSES_LOC)' |> %F.o
+: foreach *.c |> gcc -c %f -o %o -DCURSES_LOC='$(CURSES_LOC)' |> %B.o
 .gitignore
