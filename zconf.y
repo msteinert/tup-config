@@ -52,6 +52,8 @@ static struct menu *current_menu, *current_entry;
 %token <id>T_MENU
 %token <id>T_ENDMENU
 %token <id>T_SOURCE
+%token <id>T_PUSHD
+%token <id>T_POPD
 %token <id>T_CHOICE
 %token <id>T_ENDCHOICE
 %token <id>T_COMMENT
@@ -134,6 +136,8 @@ common_stmt:
 	| config_stmt
 	| menuconfig_stmt
 	| source_stmt
+	| pushd_stmt
+	| popd_stmt
 ;
 
 option_error:
@@ -388,6 +392,16 @@ source_stmt: T_SOURCE prompt T_EOL
 	printd(DEBUG_PARSE, "%s:%d:source %s\n", zconf_curname(), zconf_lineno(), $2);
 	zconf_nextfile($2);
 };
+
+pushd_stmt: T_PUSHD prompt T_EOL
+{
+	zconf_pushdir($2);
+}
+
+popd_stmt: T_POPD T_EOL
+{
+	zconf_popdir();
+}
 
 /* comment entry */
 
