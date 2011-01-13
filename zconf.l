@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <fcntl.h>
 
 #define LKC_DIRECT_LINK
 #include "lkc.h"
@@ -40,7 +39,7 @@ static int last_ts, first_ts;
 static void zconf_endhelp(void);
 static void zconf_endfile(void);
 
-void new_string(void)
+static void new_string(void)
 {
 	text = malloc(START_STRSIZE);
 	text_asize = START_STRSIZE;
@@ -48,7 +47,7 @@ void new_string(void)
 	*text = 0;
 }
 
-void append_string(const char *str, int size)
+static void append_string(const char *str, int size)
 {
 	int new_size = text_size + size + 1;
 	if (new_size > text_asize) {
@@ -62,7 +61,7 @@ void append_string(const char *str, int size)
 	text[text_size] = 0;
 }
 
-void alloc_string(const char *str, int size)
+static void alloc_string(const char *str, int size)
 {
 	text = malloc(size + 1);
 	memcpy(text, str, size);
@@ -305,9 +304,10 @@ void zconf_nextfile(const char *name)
 	memset(buf, 0, sizeof(*buf));
 
 	current_buf->state = YY_CURRENT_BUFFER;
-	yyin = zconf_fopen(name);
+	yyin = zconf_fopen(file->name);
 	if (!yyin) {
-		printf("%s:%d: can't open file \"%s\"\n", zconf_curname(), zconf_lineno(), name);
+		printf("%s:%d: can't open file \"%s\"\n",
+		    zconf_curname(), zconf_lineno(), file->name);
 		exit(1);
 	}
 	yy_switch_to_buffer(yy_create_buffer(yyin, YY_BUF_SIZE));
@@ -329,54 +329,6 @@ void zconf_nextfile(const char *name)
 	file->lineno = 1;
 	file->parent = current_file;
 	current_file = file;
-}
-
-struct dir_entry {
-	int fd;
-	struct dir_entry *next;
-};
-static struct dir_entry *dir_stack = NULL;
-
-void zconf_pushdir(const char *path)
-{
-	struct dir_entry *entry;
-	int fd;
-
-	fd = open(".", O_RDONLY);
-	if(fd < 0) {
-		printf("Error opening '.'\n");
-		exit(1);
-	}
-	if(chdir(path) != 0) {
-		printf("Unable to change to dir: '%s'\n", path);
-		exit(1);
-	}
-
-	entry = malloc(sizeof *entry);
-	if(!entry) {
-		printf("Out of memory\n");
-		exit(1);
-	}
-	entry->fd = fd;
-	entry->next = dir_stack;
-	dir_stack = entry;
-}
-
-void zconf_popdir(void)
-{
-	struct dir_entry *entry;
-
-	entry = dir_stack;
-	if(!entry) {
-		printf("Error: zconf_popdir() before zconf_pushdir\n");
-		exit(1);
-	}
-	if(fchdir(entry->fd) < 0) {
-		printf("Unable to change directory in zconf_popdir()\n");
-		exit(1);
-	}
-	dir_stack = entry->next;
-	free(entry);
 }
 
 static void zconf_endfile(void)
@@ -402,7 +354,7 @@ int zconf_lineno(void)
 	return current_pos.lineno;
 }
 
-char *zconf_curname(void)
+const char *zconf_curname(void)
 {
 	return current_pos.file ? current_pos.file->name : "<none>";
 }

@@ -14,8 +14,6 @@
 #define LKC_DIRECT_LINK
 #include "lkc.h"
 
-#include "zconf.hash.c"
-
 #define printd(mask, fmt...) if (cdebug & (mask)) printf(fmt)
 
 #define PRINTD		0x0001
@@ -29,7 +27,7 @@ static void zconf_error(const char *err, ...);
 static void zconferror(const char *err);
 static bool zconf_endtoken(struct kconf_id *id, int starttoken, int endtoken);
 
-struct symbol *symbol_hash[257];
+struct symbol *symbol_hash[SYMBOL_HASHSIZE];
 
 static struct menu *current_menu, *current_entry;
 
@@ -38,7 +36,7 @@ static struct menu *current_menu, *current_entry;
 #define YYERROR_VERBOSE
 #endif
 %}
-%expect 26
+%expect 30
 
 %union
 {
@@ -54,8 +52,6 @@ static struct menu *current_menu, *current_entry;
 %token <id>T_MENU
 %token <id>T_ENDMENU
 %token <id>T_SOURCE
-%token <id>T_PUSHD
-%token <id>T_POPD
 %token <id>T_CHOICE
 %token <id>T_ENDCHOICE
 %token <id>T_COMMENT
@@ -72,6 +68,7 @@ static struct menu *current_menu, *current_entry;
 %token <id>T_DEFAULT
 %token <id>T_SELECT
 %token <id>T_RANGE
+%token <id>T_VISIBLE
 %token <id>T_OPTION
 %token <id>T_ON
 %token <string> T_WORD
@@ -102,15 +99,21 @@ static struct menu *current_menu, *current_entry;
 		menu_end_menu();
 } if_entry menu_entry choice_entry
 
+%{
+/* Include zconf.hash.c here so it can see the token constants. */
+#include "zconf.hash.c"
+%}
+
 %%
-input: stmt_list;
+input: nl start | start;
+
+start: mainmenu_stmt stmt_list | stmt_list;
 
 stmt_list:
 	  /* empty */
 	| stmt_list common_stmt
 	| stmt_list choice_stmt
 	| stmt_list menu_stmt
-	| stmt_list T_MAINMENU prompt nl
 	| stmt_list end			{ zconf_error("unexpected end statement"); }
 	| stmt_list T_WORD error T_EOL	{ zconf_error("unknown statement \"%s\"", $2); }
 	| stmt_list option_name error T_EOL
@@ -121,7 +124,7 @@ stmt_list:
 ;
 
 option_name:
-	T_DEPENDS | T_PROMPT | T_TYPE | T_SELECT | T_OPTIONAL | T_RANGE | T_DEFAULT
+	T_DEPENDS | T_PROMPT | T_TYPE | T_SELECT | T_OPTIONAL | T_RANGE | T_DEFAULT | T_VISIBLE
 ;
 
 common_stmt:
@@ -131,8 +134,6 @@ common_stmt:
 	| config_stmt
 	| menuconfig_stmt
 	| source_stmt
-	| pushd_stmt
-	| popd_stmt
 ;
 
 option_error:
@@ -343,6 +344,13 @@ if_block:
 	| if_block choice_stmt
 ;
 
+/* mainmenu entry */
+
+mainmenu_stmt: T_MAINMENU prompt nl
+{
+	menu_add_prompt(P_MENU, $2, NULL);
+};
+
 /* menu entry */
 
 menu: T_MENU prompt T_EOL
@@ -352,7 +360,7 @@ menu: T_MENU prompt T_EOL
 	printd(DEBUG_PARSE, "%s:%d:menu\n", zconf_curname(), zconf_lineno());
 };
 
-menu_entry: menu depends_list
+menu_entry: menu visibility_list depends_list
 {
 	$$ = menu_add_menu();
 };
@@ -380,16 +388,6 @@ source_stmt: T_SOURCE prompt T_EOL
 	printd(DEBUG_PARSE, "%s:%d:source %s\n", zconf_curname(), zconf_lineno(), $2);
 	zconf_nextfile($2);
 };
-
-pushd_stmt: T_PUSHD prompt T_EOL
-{
-	zconf_pushdir($2);
-}
-
-popd_stmt: T_POPD T_EOL
-{
-	zconf_popdir();
-}
 
 /* comment entry */
 
@@ -431,6 +429,19 @@ depends: T_DEPENDS T_ON expr T_EOL
 {
 	menu_add_dep($3);
 	printd(DEBUG_PARSE, "%s:%d:depends on\n", zconf_curname(), zconf_lineno());
+};
+
+/* visibility option */
+
+visibility_list:
+	  /* empty */
+	| visibility_list visible
+	| visibility_list T_EOL
+;
+
+visible: T_VISIBLE if_expr
+{
+	menu_add_visibility($2);
 };
 
 /* prompt statement */
@@ -486,7 +497,7 @@ void conf_parse(const char *name)
 	zconf_initscan(name);
 
 	sym_init();
-	menu_init();
+	_menu_init();
 	modules_sym = sym_lookup(NULL, 0);
 	modules_sym->type = S_BOOLEAN;
 	modules_sym->flags |= SYMBOL_AUTO;
@@ -505,6 +516,10 @@ void conf_parse(const char *name)
 		prop = prop_alloc(P_DEFAULT, modules_sym);
 		prop->expr = expr_alloc_symbol(sym_lookup("MODULES", 0));
 	}
+
+	rootmenu.prompt->text = _(rootmenu.prompt->text);
+	rootmenu.prompt->text = sym_expand_string_value(rootmenu.prompt->text);
+
 	menu_finalize(&rootmenu);
 	for_all_symbols(i, sym) {
 		if (sym_check_deps(sym))
@@ -515,7 +530,7 @@ void conf_parse(const char *name)
 	sym_set_change_count(1);
 }
 
-const char *zconf_tokenname(int token)
+static const char *zconf_tokenname(int token)
 {
 	switch (token) {
 	case T_MENU:		return "menu";
@@ -525,6 +540,7 @@ const char *zconf_tokenname(int token)
 	case T_IF:		return "if";
 	case T_ENDIF:		return "endif";
 	case T_DEPENDS:		return "depends";
+	case T_VISIBLE:		return "visible";
 	}
 	return "<token>";
 }
@@ -579,7 +595,7 @@ static void zconferror(const char *err)
 #endif
 }
 
-void print_quoted_string(FILE *out, const char *str)
+static void print_quoted_string(FILE *out, const char *str)
 {
 	const char *p;
 	int len;
@@ -596,15 +612,15 @@ void print_quoted_string(FILE *out, const char *str)
 	putc('"', out);
 }
 
-void print_symbol(FILE *out, struct menu *menu)
+static void print_symbol(FILE *out, struct menu *menu)
 {
 	struct symbol *sym = menu->sym;
 	struct property *prop;
 
 	if (sym_is_choice(sym))
-		fprintf(out, "choice\n");
+		fprintf(out, "\nchoice\n");
 	else
-		fprintf(out, "config %s\n", sym->name);
+		fprintf(out, "\nconfig %s\n", sym->name);
 	switch (sym->type) {
 	case S_BOOLEAN:
 		fputs("  boolean\n", out);
@@ -650,6 +666,21 @@ void print_symbol(FILE *out, struct menu *menu)
 		case P_CHOICE:
 			fputs("  #choice value\n", out);
 			break;
+		case P_SELECT:
+			fputs( "  select ", out);
+			expr_fprint(prop->expr, out);
+			fputc('\n', out);
+			break;
+		case P_RANGE:
+			fputs( "  range ", out);
+			expr_fprint(prop->expr, out);
+			fputc('\n', out);
+			break;
+		case P_MENU:
+			fputs( "  menu ", out);
+			print_quoted_string(out, prop->text);
+			fputc('\n', out);
+			break;
 		default:
 			fprintf(out, "  unknown prop %d!\n", prop->type);
 			break;
@@ -661,7 +692,6 @@ void print_symbol(FILE *out, struct menu *menu)
 			menu->help[len] = 0;
 		fprintf(out, "  help\n%s\n", menu->help);
 	}
-	fputc('\n', out);
 }
 
 void zconfdump(FILE *out)
@@ -694,7 +724,6 @@ void zconfdump(FILE *out)
 				expr_fprint(prop->visible.expr, out);
 				fputc('\n', out);
 			}
-			fputs("\n", out);
 		}
 
 		if (menu->list)

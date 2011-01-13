@@ -9,13 +9,13 @@
 
 struct kconf_id;
 
+static struct kconf_id *kconf_id_lookup(register const char *str, register unsigned int len);
+
 %%
 mainmenu,	T_MAINMENU,	TF_COMMAND
 menu,		T_MENU,		TF_COMMAND
 endmenu,	T_ENDMENU,	TF_COMMAND
 source,		T_SOURCE,	TF_COMMAND
-pushd,		T_PUSHD,	TF_COMMAND
-popd,		T_POPD,		TF_COMMAND
 choice,		T_CHOICE,	TF_COMMAND
 endchoice,	T_ENDCHOICE,	TF_COMMAND
 comment,	T_COMMENT,	TF_COMMAND
@@ -38,6 +38,7 @@ hex,		T_TYPE,		TF_COMMAND, S_HEX
 string,		T_TYPE,		TF_COMMAND, S_STRING
 select,		T_SELECT,	TF_COMMAND
 range,		T_RANGE,	TF_COMMAND
+visible,	T_VISIBLE,	TF_COMMAND
 option,		T_OPTION,	TF_COMMAND
 on,		T_ON,		TF_PARAM
 modules,	T_OPT_MODULES,	TF_OPTION
