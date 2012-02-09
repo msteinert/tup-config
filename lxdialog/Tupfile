@@ -1,3 +1,10 @@
-CURSES_LOC = <ncurses.h>
-: foreach *.c |> gcc -c %f -o %o -DCURSES_LOC='$(CURSES_LOC)' |> %B.o
-.gitignore
+include_rules
+
+CPPFLAGS += `ncurses5-config --cflags`
+CPPFLAGS += -DCURSES_LOC='<ncurses.h>'
+CFLAGS += -g
+CFLAGS += -O2
+CFLAGS += -Wall
+
+: foreach *.c |> !cc |> %B.o {objs}
+: {objs} |> !archive |> liblxdialog.a

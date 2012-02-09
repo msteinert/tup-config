@@ -14,7 +14,7 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 
-#define LKC_DIRECT_LINK
+/* #define LKC_DIRECT_LINK */
 #include "lkc.h"
 
 static void conf(struct menu *menu);

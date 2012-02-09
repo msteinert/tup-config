@@ -280,7 +280,8 @@ void ConfigItem::init(void)
 ConfigItem::~ConfigItem(void)
 {
 	if (menu) {
-		ConfigItem** ip = (ConfigItem**)&menu->data;
+		ConfigItem* menu_data = static_cast<ConfigItem*>(menu->data);
+		ConfigItem** ip = &menu_data;
 		for (; *ip; ip = &(*ip)->nextItem) {
 			if (*ip == this) {
 				*ip = nextItem;

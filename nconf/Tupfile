@@ -1,0 +1,15 @@
+include_rules
+
+CPPFLAGS += -I$(TUP_CWD)
+CPPFLAGS += `ncurses5-config --cflags`
+CPPFLAGS += $(LIBZCONF_CPPFLAGS)
+CFLAGS += -g
+CFLAGS += -O2
+CFLAGS += -Wall
+LDFLAGS += `ncurses5-config --libs`
+LDFLAGS += $(LIBZCONF_A)
+LDFLAGS += -lpanel
+LDFLAGS += -lmenu
+
+: foreach nconf.c nconf-gui.c |> !cc |> %B.o {objs}
+: {objs} | $(LIBZCONF_A) |> !link |> tup-nconf

@@ -3,7 +3,13 @@
  * Released under the terms of the GNU GPL v2.0.
  */
 
-static const char *xpm_load[] = {
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
+#define UNUSED __attribute__ ((__unused__))
+#else
+#define UNUSED
+#endif
+
+static const char UNUSED *xpm_load[] = {
 "22 22 5 1",
 ". c None",
 "# c #000000",
@@ -33,7 +39,7 @@ static const char *xpm_load[] = {
 "###############.......",
 "......................"};
 
-static const char *xpm_save[] = {
+static const char UNUSED *xpm_save[] = {
 "22 22 5 1",
 ". c None",
 "# c #000000",
@@ -63,7 +69,7 @@ static const char *xpm_save[] = {
 "..##################..",
 "......................"};
 
-static const char *xpm_back[] = {
+static const char UNUSED *xpm_back[] = {
 "22 22 3 1",
 ". c None",
 "# c #000083",
@@ -91,7 +97,7 @@ static const char *xpm_back[] = {
 "......................",
 "......................"};
 
-static const char *xpm_tree_view[] = {
+static const char UNUSED *xpm_tree_view[] = {
 "22 22 2 1",
 ". c None",
 "# c #000000",
@@ -118,7 +124,7 @@ static const char *xpm_tree_view[] = {
 "......................",
 "......................"};
 
-static const char *xpm_single_view[] = {
+static const char UNUSED *xpm_single_view[] = {
 "22 22 2 1",
 ". c None",
 "# c #000000",
@@ -145,7 +151,7 @@ static const char *xpm_single_view[] = {
 "......................",
 "......................"};
 
-static const char *xpm_split_view[] = {
+static const char UNUSED *xpm_split_view[] = {
 "22 22 2 1",
 ". c None",
 "# c #000000",
@@ -172,7 +178,7 @@ static const char *xpm_split_view[] = {
 "......................",
 "......................"};
 
-static const char *xpm_symbol_no[] = {
+static const char UNUSED *xpm_symbol_no[] = {
 "12 12 2 1",
 "  c white",
 ". c black",
@@ -189,7 +195,7 @@ static const char *xpm_symbol_no[] = {
 " .......... ",
 "            "};
 
-static const char *xpm_symbol_mod[] = {
+static const char UNUSED *xpm_symbol_mod[] = {
 "12 12 2 1",
 "  c white",
 ". c black",
@@ -206,7 +212,7 @@ static const char *xpm_symbol_mod[] = {
 " .......... ",
 "            "};
 
-static const char *xpm_symbol_yes[] = {
+static const char UNUSED *xpm_symbol_yes[] = {
 "12 12 2 1",
 "  c white",
 ". c black",
@@ -223,7 +229,7 @@ static const char *xpm_symbol_yes[] = {
 " .......... ",
 "            "};
 
-static const char *xpm_choice_no[] = {
+static const char UNUSED *xpm_choice_no[] = {
 "12 12 2 1",
 "  c white",
 ". c black",
@@ -240,7 +246,7 @@ static const char *xpm_choice_no[] = {
 "    ....    ",
 "            "};
 
-static const char *xpm_choice_yes[] = {
+static const char UNUSED *xpm_choice_yes[] = {
 "12 12 2 1",
 "  c white",
 ". c black",
@@ -257,7 +263,7 @@ static const char *xpm_choice_yes[] = {
 "    ....    ",
 "            "};
 
-static const char *xpm_menu[] = {
+static const char UNUSED *xpm_menu[] = {
 "12 12 2 1",
 "  c white",
 ". c black",
@@ -274,7 +280,7 @@ static const char *xpm_menu[] = {
 " .......... ",
 "            "};
 
-static const char *xpm_menu_inv[] = {
+static const char UNUSED *xpm_menu_inv[] = {
 "12 12 2 1",
 "  c white",
 ". c black",
@@ -291,7 +297,7 @@ static const char *xpm_menu_inv[] = {
 " .......... ",
 "            "};
 
-static const char *xpm_menuback[] = {
+static const char UNUSED *xpm_menuback[] = {
 "12 12 2 1",
 "  c white",
 ". c black",
@@ -308,7 +314,7 @@ static const char *xpm_menuback[] = {
 " .......... ",
 "            "};
 
-static const char *xpm_void[] = {
+static const char UNUSED *xpm_void[] = {
 "12 12 2 1",
 "  c white",
 ". c black",

@@ -1,0 +1,14 @@
+include_rules
+
+CPPFLAGS += `ncurses5-config --cflags`
+CPPFLAGS += $(LIBZCONF_CPPFLAGS)
+CPPFLAGS += $(LIBLXDIALOG_CPPFLAGS)
+CFLAGS += -g
+CFLAGS += -O2
+CFLAGS += -Wall
+LDFLAGS += `ncurses5-config --libs`
+LDFLAGS += $(LIBZCONF_A)
+LDFLAGS += $(LIBLXDIALOG_A)
+
+: mconf.c |> !cc |> mconf.o {objs}
+: {objs} | $(LIBZCONF_A) $(LIBLXDIALOG_A) |> !link |> tup-mconf

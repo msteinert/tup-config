@@ -1,0 +1,44 @@
+export PKG_CONFIG_PATH
+
+# Libzconf config
+LIBZCONF_A = $(TUP_CWD)/zconf/libzconf.a
+LIBZCONF_CPPFLAGS += -I$(TUP_CWD)/zconf
+LIBZCONF_CPPFLAGS += -DLKC_DIRECT_LINK
+
+# Liblxdialog config
+LIBLXDIALOG_A = $(TUP_CWD)/lxdialog/liblxdialog.a
+LIBLXDIALOG_CPPFLAGS += -DCURSES_LOC='<ncurses.h>'
+LIBLXDIALOG_CPPFLAGS += -I$(TUP_CWD)
+
+# Set toolchain
+CC = gcc
+CXX = g++
+AR = ar
+LEX = flex
+YACC = bison
+GPERF = gperf
+MOC = moc
+
+# Compile non-PIC objects
+!cc = |> ^ CC %f^ $(CC) $(CPPFLAGS) $(CFLAGS) -c -o %o %f |> %B.o
+!cxx = |> ^ CXX %f^ $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o %o %f |> %B.o
+
+# Link a C program
+!link = |> ^ LINK %o^ $(CC) $(CFLAGS) -o %o %f $(LDFLAGS) |>
+
+# Create an archive
+!archive = |> ^ ARCHIVE %o^ $(AR) rcs %o %f |>
+
+# Create a lexer
+!lex = |> ^ LEX %o^ $(LEX) -L -P%B %f |> lex.%B.c
+
+# Create a parser
+!yacc = |> ^ YACC %o^ $(YACC) -l -b %B -p %B %f |> %B.tab.c
+
+# Create a perfect hash table
+!gperf = |> ^ GPERF %o^ $(GPERF) < %f > %o |> %B.hash.c
+
+# Qt stuff
+!moc = |> ^ MOC %o^ $(MOC) -i %f -o %o |> %B.moc
+
+.gitignore

@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#define LKC_DIRECT_LINK
+/* #define LKC_DIRECT_LINK */
 #include "lkc.h"
 
 #define START_STRSIZE	16

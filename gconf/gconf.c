@@ -285,8 +285,10 @@ void init_left_tree(void)
 static void renderer_edited(GtkCellRendererText * cell,
 			    const gchar * path_string,
 			    const gchar * new_text, gpointer user_data);
+#if 0
 static void renderer_toggled(GtkCellRendererToggle * cellrenderertoggle,
 			     gchar * arg1, gpointer user_data);
+#endif
 
 void init_right_tree(void)
 {
@@ -320,8 +322,10 @@ void init_right_tree(void)
 					    "inconsistent", COL_BTNINC,
 					    "visible", COL_BTNVIS,
 					    "radio", COL_BTNRAD, NULL);
-	/*g_signal_connect(G_OBJECT(renderer), "toggled",
-	   G_CALLBACK(renderer_toggled), NULL); */
+#if 0
+	g_signal_connect(G_OBJECT(renderer), "toggled",
+			 G_CALLBACK(renderer_toggled), NULL);
+#endif
 	renderer = gtk_cell_renderer_text_new();
 	gtk_tree_view_column_pack_start(GTK_TREE_VIEW_COLUMN(column),
 					renderer, FALSE);
@@ -890,6 +894,7 @@ static void toggle_sym_value(struct menu *menu)
 		display_tree_part();	//fixme: keep exp/coll
 }
 
+#if 0
 static void renderer_toggled(GtkCellRendererToggle * cell,
 			     gchar * path_string, gpointer user_data)
 {
@@ -918,6 +923,7 @@ static void renderer_toggled(GtkCellRendererToggle * cell,
       out1:
 	gtk_tree_path_free(path);
 }
+#endif
 
 static gint column2index(GtkTreeViewColumn * column)
 {

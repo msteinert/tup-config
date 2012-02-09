@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define LKC_DIRECT_LINK
+/* #define LKC_DIRECT_LINK */
 #include "lkc.h"
 
 #define DEBUG_EXPR	0
