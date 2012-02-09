@@ -1,3 +1,5 @@
+ifeq (@(TUP_CONFIG_GCONF),y)
+
 include_rules
 
 CPPFLAGS += $(LIBZCONF_CPPFLAGS)
@@ -11,3 +13,5 @@ LDFLAGS += -dl
 
 : gconf.c |> !cc |> gconf.o {objs}
 : {objs} | $(LIBZCONF_A) |> !link |> tup-gconf
+
+endif

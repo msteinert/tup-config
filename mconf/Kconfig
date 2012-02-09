@@ -1,0 +1,10 @@
+#
+# Tup-mconf configuration
+#
+config TUP_CONFIG_MCONF
+	bool "Enable mconf setup"
+	default y
+	select TUP_CONFIG_ZCONF
+	select TUP_CONFIG_LXDIALOG
+	---help---
+	  The 'tup-mconf' program provides Ncurses configuration.

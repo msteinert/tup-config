@@ -1,0 +1,8 @@
+#
+# Zconf library configuration
+#
+config TUP_CONFIG_ZCONF
+	bool
+	default n
+	---help---
+	  Other packages will select this library if needed.

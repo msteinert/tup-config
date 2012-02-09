@@ -1,0 +1,9 @@
+#
+# Tup-gconf configuration
+#
+config TUP_CONFIG_GCONF
+	bool "Enable gconf setup"
+	default n
+	select TUP_CONFIG_ZCONF
+	---help---
+	  The 'tup-gconf' program provides Gtk+ configuration.

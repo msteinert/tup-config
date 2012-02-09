@@ -1,3 +1,5 @@
+ifeq (@(TUP_CONFIG_NCONF),y)
+
 include_rules
 
 CPPFLAGS += -I$(TUP_CWD)
@@ -13,3 +15,5 @@ LDFLAGS += -lmenu
 
 : foreach nconf.c nconf-gui.c |> !cc |> %B.o {objs}
 : {objs} | $(LIBZCONF_A) |> !link |> tup-nconf
+
+endif

@@ -1,0 +1,9 @@
+#
+# Tup-qconf configuration
+#
+config TUP_CONFIG_QCONF
+	bool "Enable qconf setup"
+	default n
+	select TUP_CONFIG_ZCONF
+	---help---
+	  The 'tup-qconf' program provides Qt configuration.

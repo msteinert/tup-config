@@ -1,0 +1,8 @@
+#
+# Lxdialog library configuration
+#
+config TUP_CONFIG_LXDIALOG
+	bool
+	default n
+	---help---
+	  Other packages will select this library if needed.

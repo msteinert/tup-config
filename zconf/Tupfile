@@ -1,3 +1,5 @@
+ifeq (@(TUP_CONFIG_ZCONF),y)
+
 include_rules
 
 CPPFLAGS += -DLKC_DIRECT_LINK
@@ -14,3 +16,5 @@ CFLAGS += -Wall
 # Create archive
 : foreach images.c kconfig_load.c zconf.tab.c | zconf.hash.c lex.zconf.c |> !cc |> %B.o {objs}
 : {objs} |> !archive |> libzconf.a
+
+endif

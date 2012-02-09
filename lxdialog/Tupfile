@@ -1,3 +1,5 @@
+ifeq (@(TUP_CONFIG_LXDIALOG),y)
+
 include_rules
 
 CPPFLAGS += `ncurses5-config --cflags`
@@ -8,3 +10,5 @@ CFLAGS += -Wall
 
 : foreach *.c |> !cc |> %B.o {objs}
 : {objs} |> !archive |> liblxdialog.a
+
+endif

@@ -1,3 +1,5 @@
+ifeq (@(TUP_CONFIG_QCONF),y)
+
 include_rules
 
 CPPFLAGS += $(LIBZCONF_CPPFLAGS)
@@ -12,3 +14,5 @@ LDFLAGS += -ldl
 : qconf.h |> !moc |> qconf.moc
 : qconf.cc | qconf.moc |> !cxx |> qconf.o {objs}
 : {objs} | $(LIBZCONF_A) |> !link |> tup-qconf
+
+endif

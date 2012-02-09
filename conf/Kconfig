@@ -1,0 +1,9 @@
+#
+# Tup-conf configuration
+#
+config TUP_CONFIG_CONF
+	bool "Enable conf setup"
+	default y
+	select TUP_CONFIG_ZCONF
+	---help---
+	  The 'tup-conf' program provides basic command line configuration.

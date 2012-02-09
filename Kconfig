@@ -1,0 +1,44 @@
+#
+# Tup-config configuration
+#
+mainmenu "Tup-config Configuration"
+
+source conf/Kconfig
+source mconf/Kconfig
+source nconf/Kconfig
+source gconf/Kconfig
+source qconf/Kconfig
+source zconf/Kconfig
+source lxdialog/Kconfig
+
+menu "Compiler setup"
+
+config CC
+	string "C compiler"
+	default "gcc"
+
+config CXX
+	string "C++ compiler"
+	default "g++"
+
+config AR
+	string "Archiver"
+	default "ar"
+
+config LEX
+	string "Lexical analyzer generator"
+	default "flex"
+
+config YACC
+	string "Parser generator"
+	default "bison"
+
+config GPERF
+	string "Perfect hash function generator"
+	default "gperf"
+
+config MOC
+	string "Qt meta object compiler"
+	default "moc"
+
+endmenu # "Compiler setup"
