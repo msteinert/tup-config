@@ -41,4 +41,7 @@ config MOC
 	string "Qt meta object compiler"
 	default "moc"
 
+config CROSS_COMPILE
+	string "Set the cross-compiler prefix"
+
 endmenu # "Compiler setup"
