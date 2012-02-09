@@ -3,11 +3,11 @@ ifeq (@(TUP_CONFIG_GCONF),y)
 include_rules
 
 CPPFLAGS += $(LIBZCONF_CPPFLAGS)
-CPPFLAGS += `pkg-config pkg-config --cflags gtk+-2.0 gmodule-2.0 libglade-2.0`
+CPPFLAGS += `@(PKG_CONFIG) --cflags gtk+-2.0 gmodule-2.0 libglade-2.0`
 CFLAGS += -g
 CFLAGS += -O2
 CFLAGS += -Wall
-LDFLAGS += `pkg-config --libs gtk+-2.0 gmodule-2.0 libglade-2.0`
+LDFLAGS += `@(PKG_CONFIG) --libs gtk+-2.0 gmodule-2.0 libglade-2.0`
 LDFLAGS += $(LIBZCONF_A)
 LDFLAGS += -dl
 

@@ -11,7 +11,7 @@ source qconf/Kconfig
 source zconf/Kconfig
 source lxdialog/Kconfig
 
-menu "Compiler setup"
+menu "Toolchain setup"
 
 config CC
 	string "C compiler"
@@ -37,6 +37,10 @@ config GPERF
 	string "Perfect hash function generator"
 	default "gperf"
 
+config PKG_CONFIG
+	string "Package meta data"
+	default "pkg-config"
+
 config MOC
 	string "Qt meta object compiler"
 	default "moc"
@@ -44,4 +48,4 @@ config MOC
 config CROSS_COMPILE
 	string "Set the cross-compiler prefix"
 
-endmenu # "Compiler setup"
+endmenu # "Toolchain setup"

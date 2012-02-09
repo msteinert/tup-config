@@ -3,11 +3,11 @@ ifeq (@(TUP_CONFIG_QCONF),y)
 include_rules
 
 CPPFLAGS += $(LIBZCONF_CPPFLAGS)
-CPPFLAGS += `pkg-config --cflags QtCore QtGui Qt3Support QtXml`
+CPPFLAGS += `@(PKG_CONFIG) --cflags QtCore QtGui Qt3Support QtXml`
 CXXFLAGS += -g
 CXXFLAGS += -O2
 CXXFLAGS += -Wall
-LDFLAGS += `pkg-config --libs QtCore QtGui Qt3Support QtXml`
+LDFLAGS += `@(PKG_CONFIG) --libs QtCore QtGui Qt3Support QtXml`
 LDFLAGS += $(LIBZCONF_A)
 LDFLAGS += -ldl
 
