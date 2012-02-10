@@ -320,7 +320,9 @@ static void print_page(WINDOW * win, int height, int width)
  */
 static void print_line(WINDOW * win, int row, int width)
 {
+#if OLD_NCURSES
 	int y, x;
+#endif
 	char *line;
 
 	line = get_line();
@@ -329,10 +331,10 @@ static void print_line(WINDOW * win, int row, int width)
 	waddch(win, ' ');
 	waddnstr(win, line, MIN(strlen(line), width - 2));
 
-	getyx(win, y, x);
-	/* Clear 'residue' of previous line */
 #if OLD_NCURSES
 	{
+		getyx(win, y, x);
+		/* Clear 'residue' of previous line */
 		int i;
 		for (i = 0; i < width - x; i++)
 			waddch(win, ' ');
