@@ -4,9 +4,6 @@ include_rules
 
 CPPFLAGS += $(LIBZCONF_CPPFLAGS)
 CPPFLAGS += `@(PKG_CONFIG) --cflags QtCore QtGui Qt3Support QtXml`
-CXXFLAGS += -g
-CXXFLAGS += -O2
-CXXFLAGS += -Wall
 LDFLAGS += `@(PKG_CONFIG) --libs QtCore QtGui Qt3Support QtXml`
 LDFLAGS += $(LIBZCONF_A)
 LDFLAGS += -ldl

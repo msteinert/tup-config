@@ -4,9 +4,6 @@ include_rules
 
 CPPFLAGS += -DLKC_DIRECT_LINK
 CPPFLAGS += -I$(TUP_CWD)
-CFLAGS += -g
-CFLAGS += -O2
-CFLAGS += -Wall
 
 # Generate scanner/parser
 : zconf.l |> !lex |> lex.%B.c

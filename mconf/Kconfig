@@ -2,7 +2,7 @@
 # Tup-mconf configuration
 #
 config TUP_CONFIG_MCONF
-	bool "Enable mconf setup"
+	bool "Enable tup-mconf"
 	default y
 	select TUP_CONFIG_ZCONF
 	select TUP_CONFIG_LXDIALOG

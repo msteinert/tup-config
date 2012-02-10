@@ -5,9 +5,6 @@ include_rules
 CPPFLAGS += -I$(TUP_CWD)
 CPPFLAGS += `ncurses5-config --cflags`
 CPPFLAGS += $(LIBZCONF_CPPFLAGS)
-CFLAGS += -g
-CFLAGS += -O2
-CFLAGS += -Wall
 LDFLAGS += `ncurses5-config --libs`
 LDFLAGS += $(LIBZCONF_A)
 LDFLAGS += -lpanel

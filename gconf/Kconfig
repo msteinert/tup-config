@@ -2,7 +2,7 @@
 # Tup-gconf configuration
 #
 config TUP_CONFIG_GCONF
-	bool "Enable gconf setup"
+	bool "Enable tup-gconf"
 	default n
 	select TUP_CONFIG_ZCONF
 	---help---

@@ -3,9 +3,6 @@ ifeq (@(TUP_CONFIG_CONF),y)
 include_rules
 
 CPPFLAGS += $(LIBZCONF_CPPFLAGS)
-CFLAGS += -g
-CFLAGS += -O2
-CFLAGS += -Wall
 LDFLAGS += $(LIBZCONF_A)
 
 : conf.c |> !cc |> conf.o {objs}

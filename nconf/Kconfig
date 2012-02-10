@@ -2,7 +2,7 @@
 # Tup-nconf configuration
 #
 config TUP_CONFIG_NCONF
-	bool "Enable nconf setup"
+	bool "Enable tup-nconf"
 	default n
 	select TUP_CONFIG_ZCONF
 	select TUP_CONFIG_LXDIALOG

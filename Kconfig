@@ -13,17 +13,41 @@ source lxdialog/Kconfig
 
 menu "Toolchain setup"
 
+menu "C compiler"
+
 config CC
 	string "C compiler"
 	default "gcc"
+
+config CFLAGS
+	string "C compiler flags"
+	default "-g -O2 -Wall"
+
+endmenu # "C compiler"
+
+menu "C++ compiler"
 
 config CXX
 	string "C++ compiler"
 	default "g++"
 
+config CXXFLAGS
+	string "C++ compiler flags"
+	default "-g -O2 -Wall"
+
+endmenu # "C++ compiler"
+
+menu "Archiver"
+
 config AR
 	string "Archiver"
 	default "ar"
+
+config ARFLAGS
+	string "Archiver flags"
+	default "rcs"
+
+endmenu # "Archiver"
 
 config LEX
 	string "Lexical analyzer generator"
