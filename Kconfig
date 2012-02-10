@@ -61,9 +61,20 @@ config GPERF
 	string "Perfect hash function generator"
 	default "gperf"
 
+menu "Pkg-config"
+
 config PKG_CONFIG
 	string "Package meta data"
 	default "pkg-config"
+
+config EXPORT_PKG_CONFIG_PATH
+	bool "Export $PKG_CONFIG_PATH"
+	default y
+
+config PKG_CONFIG_ENV
+	string "Environment variables passed to pkg-config"
+
+endmenu # "Pkg-config"
 
 config MOC
 	string "Qt meta object compiler"

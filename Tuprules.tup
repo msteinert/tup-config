@@ -1,5 +1,3 @@
-export PKG_CONFIG_PATH
-
 # Libzconf config
 LIBZCONF_A = $(TUP_CWD)/zconf/libzconf.a
 LIBZCONF_CPPFLAGS += -I$(TUP_CWD)/zconf
@@ -9,6 +7,12 @@ LIBZCONF_CPPFLAGS += -DLKC_DIRECT_LINK
 LIBLXDIALOG_A = $(TUP_CWD)/lxdialog/liblxdialog.a
 LIBLXDIALOG_CPPFLAGS += -DCURSES_LOC='<ncurses.h>'
 LIBLXDIALOG_CPPFLAGS += -I$(TUP_CWD)
+
+# Pkg-config setup
+ifeq (@(EXPORT_PKG_CONFIG_PATH),y)
+export PKG_CONFIG_PATH
+endif
+pkg-config = @(PKG_CONFIG_ENV) @(PKG_CONFIG)
 
 # Compile non-PIC objects
 !cc = |> ^ CC %f^ @(CROSS_COMPILE)@(CC) $(CPPFLAGS) @(CFLAGS) $(CFLAGS) -c -o %o %f |> %B.o
