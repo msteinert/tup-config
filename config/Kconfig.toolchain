@@ -1,0 +1,76 @@
+#
+# Toolchain configuration
+#
+menu "Toolchain setup"
+
+menu "C compiler"
+
+config CC
+	string "C compiler"
+	default "gcc"
+
+config CFLAGS
+	string "C compiler flags"
+	default "-g -O2 -Wall"
+
+endmenu # "C compiler"
+
+menu "C++ compiler"
+
+config CXX
+	string "C++ compiler"
+	default "g++"
+
+config CXXFLAGS
+	string "C++ compiler flags"
+	default "-g -O2 -Wall"
+
+endmenu # "C++ compiler"
+
+menu "Archiver"
+
+config AR
+	string "Archiver"
+	default "ar"
+
+config ARFLAGS
+	string "Archiver flags"
+	default "rcs"
+
+endmenu # "Archiver"
+
+config LEX
+	string "Lexical analyzer generator"
+	default "flex"
+
+config YACC
+	string "Parser generator"
+	default "bison"
+
+config GPERF
+	string "Perfect hash function generator"
+	default "gperf"
+
+menu "Pkg-config"
+
+config PKG_CONFIG
+	string "Package meta data"
+	default "pkg-config"
+
+config EXPORT_PKG_CONFIG_PATH
+	bool "Export $PKG_CONFIG_PATH"
+	default y
+
+config PKG_CONFIG_ENV
+	string "Environment variables passed to pkg-config"
+
+endmenu # "Pkg-config"
+
+config MOC
+	string "Qt meta object compiler"
+	default "moc"
+
+config CROSS_COMPILE
+	string "Set the cross-compiler prefix"
+
+endmenu # "Toolchain setup"
