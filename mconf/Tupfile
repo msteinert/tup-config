@@ -9,7 +9,7 @@ LDFLAGS += `ncurses5-config --libs`
 LDFLAGS += $(LIBZCONF_A)
 LDFLAGS += $(LIBLXDIALOG_A)
 
-: mconf.c |> !cc |> mconf.o {objs}
+: mconf.c |> !cc |> {objs}
 : {objs} | $(LIBZCONF_A) $(LIBLXDIALOG_A) |> !link |> tup-mconf
 
 endif

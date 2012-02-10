@@ -8,7 +8,7 @@ LDFLAGS += `$(pkg-config) --libs gtk+-2.0 gmodule-2.0 libglade-2.0`
 LDFLAGS += $(LIBZCONF_A)
 LDFLAGS += -dl
 
-: gconf.c |> !cc |> gconf.o {objs}
+: gconf.c |> !cc |> {objs}
 : {objs} | $(LIBZCONF_A) |> !link |> tup-gconf
 
 endif

@@ -22,18 +22,18 @@ pkg-config = @(PKG_CONFIG_ENV) @(PKG_CONFIG)
 !link = |> ^ LINK %o^ @(CROSS_COMPILE)@(CC) @(CFLAGS) $(CFLAGS) -o %o %f $(LDFLAGS) |>
 
 # Create an archive
-!archive = |> ^ ARCHIVE %o^ @(CROSS_COMPILE)@(AR) @(ARFLAGS) %o %f |>
+!archive = |> ^ ARCHIVE %o^ @(CROSS_COMPILE)@(AR) @(ARFLAGS) $(ARFLAGS) %o %f |>
 
 # Create a lexer
-!lex = |> ^ LEX %o^ @(LEX) -L -P%B %f |> lex.%B.c
+!lex = |> ^ LEX %o^ @(LEX) $(LFLAGS) -P%B %f |> lex.%B.c
 
 # Create a parser
-!yacc = |> ^ YACC %o^ @(YACC) -l -b %B -p %B %f |> %B.tab.c
+!yacc = |> ^ YACC %o^ @(YACC) $(YFLAGS) -b %B -p %B %f |> %B.tab.c
 
 # Create a perfect hash table
 !gperf = |> ^ GPERF %o^ @(GPERF) < %f > %o |> %B.hash.c
 
 # Qt stuff
-!moc = |> ^ MOC %o^ @(MOC) -i %f -o %o |> %B.moc
+!moc = |> ^ MOC %o^ @(MOC) $(MOCFLAGS) -i %f -o %o |> %B.moc
 
 .gitignore

@@ -9,7 +9,7 @@ LDFLAGS += $(LIBZCONF_A)
 LDFLAGS += -ldl
 
 : qconf.h |> !moc |> qconf.moc
-: qconf.cc | qconf.moc |> !cxx |> qconf.o {objs}
+: qconf.cc | qconf.moc |> !cxx |> {objs}
 : {objs} | $(LIBZCONF_A) |> !link |> tup-qconf
 
 endif

@@ -5,7 +5,7 @@ include_rules
 CPPFLAGS += `ncurses5-config --cflags`
 CPPFLAGS += -DCURSES_LOC='<ncurses.h>'
 
-: foreach *.c |> !cc |> %B.o {objs}
+: foreach *.c |> !cc |> {objs}
 : {objs} |> !archive |> liblxdialog.a
 
 endif

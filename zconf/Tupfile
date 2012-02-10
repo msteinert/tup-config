@@ -4,14 +4,16 @@ include_rules
 
 CPPFLAGS += -DLKC_DIRECT_LINK
 CPPFLAGS += -I$(TUP_CWD)
+LFLAGS += -L
+YFLAGS += -l
 
 # Generate scanner/parser
-: zconf.l |> !lex |> lex.%B.c
-: zconf.y |> !yacc |> %B.tab.c
-: zconf.gperf |> !gperf |> %B.hash.c
+: zconf.l |> !lex |>
+: zconf.y |> !yacc |>
+: zconf.gperf |> !gperf |>
 
 # Create archive
-: foreach images.c kconfig_load.c zconf.tab.c | zconf.hash.c lex.zconf.c |> !cc |> %B.o {objs}
+: foreach images.c kconfig_load.c zconf.tab.c | zconf.hash.c lex.zconf.c |> !cc |> {objs}
 : {objs} |> !archive |> libzconf.a
 
 endif

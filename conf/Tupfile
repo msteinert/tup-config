@@ -5,7 +5,7 @@ include_rules
 CPPFLAGS += $(LIBZCONF_CPPFLAGS)
 LDFLAGS += $(LIBZCONF_A)
 
-: conf.c |> !cc |> conf.o {objs}
+: conf.c |> !cc |> {objs}
 : {objs} | $(LIBZCONF_A) |> !link |> tup-conf
 
 endif

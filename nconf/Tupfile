@@ -10,7 +10,7 @@ LDFLAGS += $(LIBZCONF_A)
 LDFLAGS += -lpanel
 LDFLAGS += -lmenu
 
-: foreach nconf.c nconf-gui.c |> !cc |> %B.o {objs}
+: foreach nconf.c nconf-gui.c |> !cc |> {objs}
 : {objs} | $(LIBZCONF_A) |> !link |> tup-nconf
 
 endif
