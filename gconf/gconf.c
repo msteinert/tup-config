@@ -7,7 +7,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#  include <config.h>
+#include <config.h>
 #endif
 
 #include "lkc.h"
@@ -79,7 +79,8 @@ static void conf_changed(void);
 
 /* Helping/Debugging Functions */
 
-const char *dbg_sym_flags(int val)
+const char *
+dbg_sym_flags(int val)
 {
 	static char buf[256];
 
@@ -109,8 +110,12 @@ const char *dbg_sym_flags(int val)
 	return buf;
 }
 
-void replace_button_icon(GladeXML * xml, GdkDrawable * window,
-			 GtkStyle * style, gchar * btn_name, gchar ** xpm)
+void
+replace_button_icon(GladeXML *xml,
+		    GdkDrawable *window,
+		    GtkStyle *style,
+		    gchar *btn_name,
+		    gchar **xpm)
 {
 	GdkPixmap *pixmap;
 	GdkBitmap *mask;
@@ -128,7 +133,8 @@ void replace_button_icon(GladeXML * xml, GdkDrawable * window,
 }
 
 /* Main Window Initialization */
-void init_main_window(const gchar * glade_file)
+void
+init_main_window(const gchar *glade_file)
 {
 	GladeXML *xml;
 	GtkWidget *widget;
@@ -214,7 +220,8 @@ void init_main_window(const gchar * glade_file)
 	gtk_widget_show(main_wnd);
 }
 
-void init_tree_model(void)
+void
+init_tree_model(void)
 {
 	gint i;
 
@@ -244,7 +251,8 @@ void init_tree_model(void)
 	model1 = GTK_TREE_MODEL(tree1);
 }
 
-void init_left_tree(void)
+void
+init_left_tree(void)
 {
 	GtkTreeView *view = GTK_TREE_VIEW(tree1_w);
 	GtkCellRenderer *renderer;
@@ -282,15 +290,18 @@ void init_left_tree(void)
 	gtk_widget_realize(tree1_w);
 }
 
-static void renderer_edited(GtkCellRendererText * cell,
-			    const gchar * path_string,
-			    const gchar * new_text, gpointer user_data);
+static void
+renderer_edited(GtkCellRendererText *cell,
+		const gchar *path_string,
+		const gchar *new_text,
+		gpointer user_data);
 #if 0
 static void renderer_toggled(GtkCellRendererToggle * cellrenderertoggle,
 			     gchar * arg1, gpointer user_data);
 #endif
 
-void init_right_tree(void)
+void
+init_right_tree(void)
 {
 	GtkTreeView *view = GTK_TREE_VIEW(tree2_w);
 	GtkCellRenderer *renderer;
@@ -392,11 +403,10 @@ void init_right_tree(void)
 	gtk_tree_selection_set_mode(sel, GTK_SELECTION_SINGLE);
 }
 
-
 /* Utility Functions */
 
-
-static void text_insert_help(struct menu *menu)
+static void
+text_insert_help(struct menu *menu)
 {
 	GtkTextBuffer *buffer;
 	GtkTextIter start, end;
@@ -420,7 +430,6 @@ static void text_insert_help(struct menu *menu)
 	str_free(&help);
 }
 
-
 static void text_insert_msg(const char *title, const char *message)
 {
 	GtkTextBuffer *buffer;
@@ -441,12 +450,15 @@ static void text_insert_msg(const char *title, const char *message)
 					 NULL);
 }
 
-
 /* Main Windows Callbacks */
 
-void on_save_activate(GtkMenuItem * menuitem, gpointer user_data);
-gboolean on_window1_delete_event(GtkWidget * widget, GdkEvent * event,
-				 gpointer user_data)
+void
+on_save_activate(GtkMenuItem *menuitem, gpointer user_data);
+
+gboolean
+on_window1_delete_event(GtkWidget *widget,
+			GdkEvent *event,
+			gpointer user_data)
 {
 	GtkWidget *dialog, *label;
 	gint result;
@@ -489,16 +501,16 @@ gboolean on_window1_delete_event(GtkWidget * widget, GdkEvent * event,
 	return FALSE;
 }
 
-
-void on_window1_destroy(GtkObject * object, gpointer user_data)
+void
+on_window1_destroy(GtkObject *object, gpointer user_data)
 {
 	gtk_main_quit();
 }
 
-
 void
-on_window1_size_request(GtkWidget * widget,
-			GtkRequisition * requisition, gpointer user_data)
+on_window1_size_request(GtkWidget *widget,
+			GtkRequisition *requisition,
+			gpointer user_data)
 {
 	static gint old_h;
 	gint w, h;
@@ -515,12 +527,10 @@ on_window1_size_request(GtkWidget * widget,
 	gtk_paned_set_position(GTK_PANED(vpaned), 2 * h / 3);
 }
 
-
 /* Menu & Toolbar Callbacks */
 
-
 static void
-load_filename(GtkFileSelection * file_selector, gpointer user_data)
+load_filename(GtkFileSelection *file_selector, gpointer user_data)
 {
 	const gchar *fn;
 
@@ -533,7 +543,8 @@ load_filename(GtkFileSelection * file_selector, gpointer user_data)
 		display_tree(&rootmenu);
 }
 
-void on_load1_activate(GtkMenuItem * menuitem, gpointer user_data)
+void
+on_load1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *fs;
 
@@ -552,16 +563,15 @@ void on_load1_activate(GtkMenuItem * menuitem, gpointer user_data)
 	gtk_widget_show(fs);
 }
 
-
-void on_save_activate(GtkMenuItem * menuitem, gpointer user_data)
+void
+on_save_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	if (conf_write(NULL))
 		text_insert_msg(_("Error"), _("Unable to save configuration !"));
 }
 
-
 static void
-store_filename(GtkFileSelection * file_selector, gpointer user_data)
+store_filename(GtkFileSelection *file_selector, gpointer user_data)
 {
 	const gchar *fn;
 
@@ -574,7 +584,8 @@ store_filename(GtkFileSelection * file_selector, gpointer user_data)
 	gtk_widget_destroy(GTK_WIDGET(user_data));
 }
 
-void on_save_as1_activate(GtkMenuItem * menuitem, gpointer user_data)
+void
+on_save_as1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *fs;
 
@@ -593,15 +604,15 @@ void on_save_as1_activate(GtkMenuItem * menuitem, gpointer user_data)
 	gtk_widget_show(fs);
 }
 
-
-void on_quit1_activate(GtkMenuItem * menuitem, gpointer user_data)
+void
+on_quit1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	if (!on_window1_delete_event(NULL, NULL, NULL))
 		gtk_widget_destroy(GTK_WIDGET(main_wnd));
 }
 
-
-void on_show_name1_activate(GtkMenuItem * menuitem, gpointer user_data)
+void
+on_show_name1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkTreeViewColumn *col;
 
@@ -611,8 +622,8 @@ void on_show_name1_activate(GtkMenuItem * menuitem, gpointer user_data)
 		gtk_tree_view_column_set_visible(col, show_name);
 }
 
-
-void on_show_range1_activate(GtkMenuItem * menuitem, gpointer user_data)
+void
+on_show_range1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkTreeViewColumn *col;
 
@@ -629,8 +640,8 @@ void on_show_range1_activate(GtkMenuItem * menuitem, gpointer user_data)
 
 }
 
-
-void on_show_data1_activate(GtkMenuItem * menuitem, gpointer user_data)
+void
+on_show_data1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkTreeViewColumn *col;
 
@@ -640,7 +651,6 @@ void on_show_data1_activate(GtkMenuItem * menuitem, gpointer user_data)
 		gtk_tree_view_column_set_visible(col, show_value);
 }
 
-
 void
 on_set_option_mode1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
@@ -648,7 +658,6 @@ on_set_option_mode1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_tree_store_clear(tree2);
 	display_tree(&rootmenu);	/* instead of update_tree to speed-up */
 }
-
 
 void
 on_set_option_mode2_activate(GtkMenuItem *menuitem, gpointer user_data)
@@ -658,7 +667,6 @@ on_set_option_mode2_activate(GtkMenuItem *menuitem, gpointer user_data)
 	display_tree(&rootmenu);	/* instead of update_tree to speed-up */
 }
 
-
 void
 on_set_option_mode3_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
@@ -667,8 +675,8 @@ on_set_option_mode3_activate(GtkMenuItem *menuitem, gpointer user_data)
 	display_tree(&rootmenu);	/* instead of update_tree to speed-up */
 }
 
-
-void on_introduction1_activate(GtkMenuItem * menuitem, gpointer user_data)
+void
+on_introduction1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *dialog;
 	const gchar *intro_text = _(
@@ -698,8 +706,8 @@ void on_introduction1_activate(GtkMenuItem * menuitem, gpointer user_data)
 	gtk_widget_show_all(dialog);
 }
 
-
-void on_about1_activate(GtkMenuItem * menuitem, gpointer user_data)
+void
+on_about1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *dialog;
 	const gchar *about_text =
@@ -716,8 +724,8 @@ void on_about1_activate(GtkMenuItem * menuitem, gpointer user_data)
 	gtk_widget_show_all(dialog);
 }
 
-
-void on_license1_activate(GtkMenuItem * menuitem, gpointer user_data)
+void
+on_license1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *dialog;
 	const gchar *license_text =
@@ -735,8 +743,8 @@ void on_license1_activate(GtkMenuItem * menuitem, gpointer user_data)
 	gtk_widget_show_all(dialog);
 }
 
-
-void on_back_clicked(GtkButton * button, gpointer user_data)
+void
+on_back_clicked(GtkButton *button, gpointer user_data)
 {
 	enum prop_type ptype;
 
@@ -750,14 +758,14 @@ void on_back_clicked(GtkButton * button, gpointer user_data)
 		gtk_widget_set_sensitive(back_btn, FALSE);
 }
 
-
-void on_load_clicked(GtkButton * button, gpointer user_data)
+void
+on_load_clicked(GtkButton *button, gpointer user_data)
 {
 	on_load1_activate(NULL, user_data);
 }
 
-
-void on_single_clicked(GtkButton * button, gpointer user_data)
+void
+on_single_clicked(GtkButton *button, gpointer user_data)
 {
 	view_mode = SINGLE_VIEW;
 	gtk_paned_set_position(GTK_PANED(hpaned), 0);
@@ -767,7 +775,8 @@ void on_single_clicked(GtkButton * button, gpointer user_data)
 }
 
 
-void on_split_clicked(GtkButton * button, gpointer user_data)
+void
+on_split_clicked(GtkButton *button, gpointer user_data)
 {
 	gint w, h;
 	view_mode = SPLIT_VIEW;
@@ -782,8 +791,8 @@ void on_split_clicked(GtkButton * button, gpointer user_data)
 	gtk_widget_set_sensitive(back_btn, FALSE);
 }
 
-
-void on_full_clicked(GtkButton * button, gpointer user_data)
+void
+on_full_clicked(GtkButton *button, gpointer user_data)
 {
 	view_mode = FULL_VIEW;
 	gtk_paned_set_position(GTK_PANED(hpaned), 0);
@@ -794,25 +803,26 @@ void on_full_clicked(GtkButton * button, gpointer user_data)
 	gtk_widget_set_sensitive(back_btn, FALSE);
 }
 
-
-void on_collapse_clicked(GtkButton * button, gpointer user_data)
+void
+on_collapse_clicked(GtkButton *button, gpointer user_data)
 {
 	gtk_tree_view_collapse_all(GTK_TREE_VIEW(tree2_w));
 }
 
-
-void on_expand_clicked(GtkButton * button, gpointer user_data)
+void
+on_expand_clicked(GtkButton *button, gpointer user_data)
 {
 	gtk_tree_view_expand_all(GTK_TREE_VIEW(tree2_w));
 }
 
-
 /* CTree Callbacks */
 
 /* Change hex/int/string value in the cell */
-static void renderer_edited(GtkCellRendererText * cell,
-			    const gchar * path_string,
-			    const gchar * new_text, gpointer user_data)
+static void
+renderer_edited(GtkCellRendererText *cell,
+		const gchar *path_string,
+		const gchar *new_text,
+		gpointer user_data)
 {
 	GtkTreePath *path = gtk_tree_path_new_from_string(path_string);
 	GtkTreeIter iter;
@@ -837,7 +847,8 @@ static void renderer_edited(GtkCellRendererText * cell,
 }
 
 /* Change the value of a symbol and update the tree */
-static void change_sym_value(struct menu *menu, gint col)
+static void
+change_sym_value(struct menu *menu, gint col)
 {
 	struct symbol *sym = menu->sym;
 	tristate newval;
@@ -877,7 +888,8 @@ static void change_sym_value(struct menu *menu, gint col)
 	}
 }
 
-static void toggle_sym_value(struct menu *menu)
+static void
+toggle_sym_value(struct menu *menu)
 {
 	if (!menu->sym)
 		return;
@@ -894,8 +906,10 @@ static void toggle_sym_value(struct menu *menu)
 }
 
 #if 0
-static void renderer_toggled(GtkCellRendererToggle * cell,
-			     gchar * path_string, gpointer user_data)
+static void
+renderer_toggled(GtkCellRendererToggle *cell,
+		 gchar *path_string,
+		 gpointer user_data)
 {
 	GtkTreePath *path, *sel_path = NULL;
 	GtkTreeIter iter, sel_iter;
@@ -924,7 +938,8 @@ static void renderer_toggled(GtkCellRendererToggle * cell,
 }
 #endif
 
-static gint column2index(GtkTreeViewColumn * column)
+static gint
+column2index(GtkTreeViewColumn *column)
 {
 	gint i;
 
@@ -939,11 +954,11 @@ static gint column2index(GtkTreeViewColumn * column)
 	return -1;
 }
 
-
 /* User click: update choice (full) or goes down (single) */
 gboolean
-on_treeview2_button_press_event(GtkWidget * widget,
-				GdkEventButton * event, gpointer user_data)
+on_treeview2_button_press_event(GtkWidget *widget,
+				GdkEventButton *event,
+				gpointer user_data)
 {
 	GtkTreeView *view = GTK_TREE_VIEW(widget);
 	GtkTreePath *path;
@@ -957,8 +972,7 @@ on_treeview2_button_press_event(GtkWidget * widget,
 	gint ty = (gint) event->y;
 	gint cx, cy;
 
-	gtk_tree_view_get_path_at_pos(view, tx, ty, &path, &column, &cx,
-				      &cy);
+	gtk_tree_view_get_path_at_pos(view, tx, ty, &path, &column, &cx, &cy);
 #else
 	gtk_tree_view_get_cursor(view, &path, &column);
 #endif
@@ -974,12 +988,13 @@ on_treeview2_button_press_event(GtkWidget * widget,
 		enum prop_type ptype;
 		ptype = menu->prompt ? menu->prompt->type : P_UNKNOWN;
 
-		if (ptype == P_MENU && view_mode != FULL_VIEW && col == COL_OPTION) {
+		if (ptype == P_MENU &&
+		    view_mode != FULL_VIEW && col == COL_OPTION) {
 			// goes down into menu
 			current = menu;
 			display_tree_part();
 			gtk_widget_set_sensitive(back_btn, TRUE);
-		} else if ((col == COL_OPTION)) {
+		} else if (col == COL_OPTION) {
 			toggle_sym_value(menu);
 			gtk_tree_view_expand_row(view, path, TRUE);
 		}
@@ -999,8 +1014,9 @@ on_treeview2_button_press_event(GtkWidget * widget,
 
 /* Key pressed: update choice */
 gboolean
-on_treeview2_key_press_event(GtkWidget * widget,
-			     GdkEventKey * event, gpointer user_data)
+on_treeview2_key_press_event(GtkWidget *widget,
+			     GdkEventKey *event,
+			     gpointer user_data)
 {
 	GtkTreeView *view = GTK_TREE_VIEW(widget);
 	GtkTreePath *path;
@@ -1041,10 +1057,9 @@ on_treeview2_key_press_event(GtkWidget * widget,
 	return FALSE;
 }
 
-
 /* Row selection changed: update help */
 void
-on_treeview2_cursor_changed(GtkTreeView * treeview, gpointer user_data)
+on_treeview2_cursor_changed(GtkTreeView *treeview, gpointer user_data)
 {
 	GtkTreeSelection *selection;
 	GtkTreeIter iter;
@@ -1057,11 +1072,11 @@ on_treeview2_cursor_changed(GtkTreeView * treeview, gpointer user_data)
 	}
 }
 
-
 /* User click: display sub-tree in the right frame. */
 gboolean
-on_treeview1_button_press_event(GtkWidget * widget,
-				GdkEventButton * event, gpointer user_data)
+on_treeview1_button_press_event(GtkWidget *widget,
+				GdkEventButton *event,
+				gpointer user_data)
 {
 	GtkTreeView *view = GTK_TREE_VIEW(widget);
 	GtkTreePath *path;
@@ -1097,9 +1112,9 @@ on_treeview1_button_press_event(GtkWidget * widget,
 	return FALSE;
 }
 
-
 /* Fill a row of strings */
-static gchar **fill_row(struct menu *menu)
+static gchar **
+fill_row(struct menu *menu)
 {
 	static gchar *row[COL_NUMBER];
 	struct symbol *sym = menu->sym;
@@ -1221,9 +1236,9 @@ static gchar **fill_row(struct menu *menu)
 	return row;
 }
 
-
 /* Set the node content with a row of strings */
-static void set_node(GtkTreeIter * node, struct menu *menu, gchar ** row)
+static void
+set_node(GtkTreeIter *node, struct menu *menu, gchar **row)
 {
 	GdkColor color;
 	gboolean success;
@@ -1257,9 +1272,9 @@ static void set_node(GtkTreeIter * node, struct menu *menu, gchar ** row)
 	g_object_unref(pix);
 }
 
-
 /* Add a node to the tree */
-static void place_node(struct menu *menu, char **row)
+static void
+place_node(struct menu *menu, char **row)
 {
 	GtkTreeIter *parent = parents[indent - 1];
 	GtkTreeIter *node = parents[indent];
@@ -1275,8 +1290,9 @@ static GtkTreeIter found;
 /*
  * Find a menu in the GtkTree starting at parent.
  */
-GtkTreeIter *gtktree_iter_find_node(GtkTreeIter * parent,
-				    struct menu *tofind)
+GtkTreeIter *
+gtktree_iter_find_node(GtkTreeIter * parent,
+		       struct menu *tofind)
 {
 	GtkTreeIter iter;
 	GtkTreeIter *child = &iter;
@@ -1304,12 +1320,12 @@ GtkTreeIter *gtktree_iter_find_node(GtkTreeIter * parent,
 	return NULL;
 }
 
-
 /*
  * Update the tree by adding/removing entries
  * Does not change other nodes
  */
-static void update_tree(struct menu *src, GtkTreeIter * dst)
+static void
+update_tree(struct menu *src, GtkTreeIter *dst)
 {
 	struct menu *child1;
 	GtkTreeIter iter, tmp;
@@ -1393,9 +1409,9 @@ static void update_tree(struct menu *src, GtkTreeIter * dst)
 	}
 }
 
-
 /* Display the whole tree (single/split/full view) */
-static void display_tree(struct menu *menu)
+static void
+display_tree(struct menu *menu)
 {
 	struct symbol *sym;
 	struct property *prop;
@@ -1458,7 +1474,8 @@ static void display_tree(struct menu *menu)
 }
 
 /* Display a part of the tree starting at current node (single/split view) */
-static void display_tree_part(void)
+static void
+display_tree_part(void)
 {
 	if (tree2)
 		gtk_tree_store_clear(tree2);
@@ -1470,7 +1487,8 @@ static void display_tree_part(void)
 }
 
 /* Display the list in the left frame (split view) */
-static void display_list(void)
+static void
+display_list(void)
 {
 	if (tree1)
 		gtk_tree_store_clear(tree1);
@@ -1481,7 +1499,8 @@ static void display_list(void)
 	tree = tree2;
 }
 
-void fixup_rootmenu(struct menu *menu)
+void
+fixup_rootmenu(struct menu *menu)
 {
 	struct menu *child;
 	static int menu_cnt = 0;
@@ -1497,9 +1516,9 @@ void fixup_rootmenu(struct menu *menu)
 	}
 }
 
-
 /* Main */
-int main(int ac, char *av[])
+int
+main(int ac, char *av[])
 {
 	const char *name;
 	char *env;
@@ -1572,7 +1591,8 @@ int main(int ac, char *av[])
 	return 0;
 }
 
-static void conf_changed(void)
+static void
+conf_changed(void)
 {
 	bool changed = conf_get_changed();
 	gtk_widget_set_sensitive(save_btn, changed);
