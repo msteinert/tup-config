@@ -1,7 +1,4 @@
 #!/bin/sh
 export KCONFIG_CONFIG=tup.config
 export KCONFIG_OVERWRITECONFIG=1
-#srctree=~/.local/share/tup-kconfig tup-gconf Kconfig
-#tup-qconf Kconfig
-#tup-nconf Kconfig
-tup-mconf Kconfig
+./mconf/tup-mconf Kconfig
