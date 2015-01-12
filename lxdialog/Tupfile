@@ -2,7 +2,7 @@ ifeq (@(TUP_CONFIG_LXDIALOG),y)
 
 include_rules
 
-CPPFLAGS += `ncurses5-config --cflags`
+CPPFLAGS += `$(NCURSES_CONFIG) --cflags`
 CPPFLAGS += -DCURSES_LOC='<ncurses.h>'
 
 : foreach *.c |> !cc |> {objs}

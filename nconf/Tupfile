@@ -3,9 +3,9 @@ ifeq (@(TUP_CONFIG_NCONF),y)
 include_rules
 
 CPPFLAGS += -I$(TUP_CWD)
-CPPFLAGS += `ncurses5-config --cflags`
+CPPFLAGS += `$(NCURSES_CONFIG) --cflags`
 CPPFLAGS += $(LIBZCONF_CPPFLAGS)
-LDFLAGS += `ncurses5-config --libs`
+LDFLAGS += `$(NCURSES_CONFIG) --libs`
 LDFLAGS += $(LIBZCONF_A)
 LDFLAGS += -lpanel
 LDFLAGS += -lmenu

@@ -14,6 +14,12 @@ export PKG_CONFIG_PATH
 endif
 pkg-config = @(PKG_CONFIG_ENV) @(PKG_CONFIG)
 
+ifdef NCURSES_CONFIG
+NCURSES_CONFIG = @(NCURSES_CONFIG)
+else
+NCURSES_CONFIG = ncurses5-config
+endif
+
 # Compile non-PIC objects
 !cc = |> ^ CC %f^ @(CROSS_COMPILE)@(CC) $(CPPFLAGS) @(CFLAGS) $(CFLAGS) -c -o %o %f |> %B.o
 !cxx = |> ^ CXX %f^ @(CROSS_COMPILE)@(CXX) $(CPPFLAGS) @(CXXFLAGS) $(CXXFLAGS) -c -o %o %f |> %B.o
